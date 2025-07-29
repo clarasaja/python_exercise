@@ -2,14 +2,24 @@ from es4_csv_class import CSVFile
 
 class NumericalCSVFile(CSVFile):
     def get_data_as_float(self):
-        dati_as_float = super().get_data()  
+        dati_as_str = super().get_data()  
 
-        for elemento in dati_as_float:  # elemento: ['data', 'valore', ...,]
-            for i, valore in enumerate(elemento[1:], start=1):  # parte dall'elemento 2 
-                try:
-                    elemento[i] = float(valore)  
-                except Exception as errore:
-                    print(f'Errore di conversione del valore "{valore}" a numerico: {errore}')
+        dati_as_float = [] #lista di liste
+
+        for elementi in dati_as_str:  # elemento_A: ['data', 'valore', ...,], elemento_B: ['data', 'valore', ...,], ...
+            try:
+                #copio la data
+                nuova_lista_elementi = [elementi[0]]
+                for valore in elementi[1:]:  #salta "data"
+                    nuova_lista_elementi.append(float(valore))
+            except ValueError:
+                print(f'Errore di conversione con valore "{valore}" a numerico.')  
+                continue
+            except Exception as errore:
+                print(f'Errore di conversione del valore "{valore}" a numerico: {errore}')  
+                break
+            dati_as_float.append(nuova_lista_elementi)
+
 
         return dati_as_float
 
